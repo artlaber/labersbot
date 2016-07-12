@@ -38,13 +38,13 @@ public class HoroskopeHandler extends TelegramLongPollingBot {
         return Config.TOKEN;
     }
 
-    private void handleRequest(Update update) {
+    public void handleRequest(Update update) {
         Message incomeUpdate = update.getMessage();
         String messageBody = incomeUpdate.getText().toLowerCase();
 
         if (incomeUpdate != null && incomeUpdate.hasText()) {
 
-            String [] commands = messageBody.split(" ");
+            String[] commands = messageBody.split(" ");
 
             if (commands.length > 0 && Config.SUPPORTED_COMMANDS.contains(commands[0])) {
 
@@ -54,27 +54,26 @@ public class HoroskopeHandler extends TelegramLongPollingBot {
                 if (commands[0].equals("гороскоп") && commands.length > 1) {
 
                     try {
-                        if (commands.length < 3) {
-                            replyRequest.setText("@" + incomeUpdate.getFrom().getUserName() + "\n" +
-                                    "" + horoService.getCommonDailyHoro(commands[1], 0));
-                        }
-                        else {
-                            replyRequest.setText("@" + incomeUpdate.getFrom().getUserName() + "\n" +
-                                    "" + horoService.getCommonDailyHoro(commands[1], Integer.valueOf(commands[2])));
-                        }
+                        replyRequest.setText("@" + incomeUpdate.getFrom().getUserName() + "\n" +
+                                "" + horoService.getCommonDailyHoro(commands[1]));
                     } catch (NullPointerException e) {
-                        replyRequest.setText("Знак не найден (((");
+                        replyRequest.setText("Знак не найден ((( \n" +
+                                "Используйте команду: \n" +
+                                "гороскоп <знак> \n" +
+                                "\n" +
+                                "где вместо <знак> необходимо подставить желаемый знак зодиака, классическое его название. К примеру: гороскоп козерог");
                     } catch (Exception e) {
-                        replyRequest.setText("Something went wrong: " + e.getMessage());
+                        replyRequest.setText("Знак не найден ((( \n" +
+                                "Используйте команду: \n" +
+                                "гороскоп <знак> \n" +
+                                "\n" +
+                                "где вместо <знак> необходимо подставить желаемый знак зодиака, классическое его название. К примеру: гороскоп козерог");
                     }
-                }
-                else {
-                    replyRequest.setText("Введите знак!\n" +
-                            "Поддерживаемые команды:\n" +
-                            "1. гороскоп знак 1 - общий (или просто гороскоп знак)\n" +
-                            "2. гороскоп знак 2 - любовний\n" +
-                            "3. гороскоп знак 3 - семейный\n" +
-                            "4. гороскоп знак 4 - флирт\n");
+                } else {
+                    replyRequest.setText("Используйте команду: \n" +
+                            "гороскоп <знак> \n" +
+                            "\n" +
+                            "где вместо <знак> необходимо подставить желаемый знак зодиака, классическое его название. К примеру: гороскоп козерог");
                 }
 
                 try {

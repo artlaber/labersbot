@@ -5,7 +5,7 @@ package org.artlaber.services.horo;
  */
 public interface HoroskopeService {
 
-    public String getCommonDailyHoro(String sign, int type);
+    public String getCommonDailyHoro(String sign);
 
     public String getWorkingDailyHoro(String sign);
 

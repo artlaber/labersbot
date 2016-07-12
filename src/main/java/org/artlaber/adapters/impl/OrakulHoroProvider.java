@@ -39,14 +39,49 @@ public class OrakulHoroProvider implements HoroskopeGetter {
     public static final String LOVE = "love/";
     public static final String FAMILY = "family/";
     public static final String FLIRT = "flirt/";
+    public static final String CAREER = "career/";
     public static final String TODAY_ENDING = "/today.html";
 
     @Override
+    public String getHoroskopeForSign(String sign) {
+        return getHoroskopeForSign(sign, 0);
+    }
+
+    @Override
     public String getHoroskopeForSign(String sign, int type) {
+        StringBuilder resultMessage = new StringBuilder();
+
+        if (!horo2keyMap.keySet().contains(sign)) {
+            throw new NullPointerException("Знак не найден");
+        }
+
+        resultMessage.append("Гороскоп для знака: " + sign + "\n\n");
         try {
-            Document doc = Jsoup.connect(getSignURL(sign, type)).get();
-            String textContents = doc.select(".horoBlock").first().text();
-            return textContents;
+            for (int i=1; i<=5; i++) {
+                switch (i) {
+                    case 1:
+                        resultMessage.append("Общий\n");
+                        break;
+                    case 2:
+                        resultMessage.append("Любовный\n");
+                        break;
+                    case 3:
+                        resultMessage.append("Семейный\n");
+                        break;
+                    case 4:
+                        resultMessage.append("Флирт\n");
+                        break;
+                    case 5:
+                        resultMessage.append("Бизнесс\n");
+                        break;
+                    default:
+                        break;
+                }
+
+                Document doc = Jsoup.connect(getSignURL(sign, i)).get();
+                resultMessage.append(doc.select(".horoBlock").first().text()).append("\n\n");
+            }
+            return resultMessage.toString();
         } catch (NullPointerException e) {
             //
         } catch (IOException e) {
@@ -76,6 +111,9 @@ public class OrakulHoroProvider implements HoroskopeGetter {
                 break;
             case 4:
                 result.append(FLIRT);
+                break;
+            case 5:
+                result.append(CAREER);
                 break;
             default:
                 result.append(TODAY_MORE);

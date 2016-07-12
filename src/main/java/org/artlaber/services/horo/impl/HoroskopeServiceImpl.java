@@ -12,8 +12,8 @@ public class HoroskopeServiceImpl implements HoroskopeService {
     private HoroskopeGetter horoProvider = new OrakulHoroProvider();
 
     @Override
-    public String getCommonDailyHoro(String sign, int type) {
-        return horoProvider.getHoroskopeForSign(sign, type);
+    public String getCommonDailyHoro(String sign) {
+        return horoProvider.getHoroskopeForSign(sign);
     }
 
     @Override
